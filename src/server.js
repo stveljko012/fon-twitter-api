@@ -5,6 +5,7 @@ const {
     createTweetPayloadSchema,
     createCommentPayloadSchema,
 } = require('./validation');
+const { transform } = require('./utils');
 
 const PORT = process.env.PORT || 3000;
 
@@ -26,7 +27,7 @@ async function main() {
     // USERS
     app.get('/api/users', async (req, res) => {
         const users = await db.collection('users').find({}).toArray();
-        res.status(200).send(users);
+        res.status(200).send(users.map(transform));
     });
 
     app.post('/api/users', async (req, res) => {
@@ -44,13 +45,13 @@ async function main() {
             .collection('users')
             .findOne({ _id: result.insertedId });
 
-        res.status(201).send(created);
+        res.status(201).send(transform(created));
     });
 
     // TWEETS
     app.get('/api/tweets', async (req, res) => {
         const tweets = await db.collection('tweets').find({}).toArray();
-        res.status(200).send(tweets);
+        res.status(200).send(tweets.map(transform));
     });
 
     app.post('/api/tweets', async (req, res) => {
@@ -68,13 +69,13 @@ async function main() {
             .collection('tweets')
             .findOne({ _id: result.insertedId });
 
-        res.status(201).send(created);
+        res.status(201).send(transform(created));
     });
 
     // COMMENTS
     app.get('/api/comments', async (req, res) => {
-        const tweets = await db.collection('comments').find({}).toArray();
-        res.status(200).send(tweets);
+        const comments = await db.collection('comments').find({}).toArray();
+        res.status(200).send(comments.map(transform));
     });
 
     app.post('/api/comments', async (req, res) => {
@@ -92,7 +93,7 @@ async function main() {
             .collection('comments')
             .findOne({ _id: result.insertedId });
 
-        res.status(201).send(created);
+        res.status(201).send(transform(created));
     });
 
     app.use('*', (req, res) => {
