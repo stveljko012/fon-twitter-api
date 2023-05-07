@@ -1,4 +1,4 @@
-export const transform = (data) => {
+const transform = (data) => {
     if (!data) {
         return data;
     }
@@ -10,3 +10,7 @@ export const transform = (data) => {
         ...rest,
     };
 };
+
+module.exports = {
+    transform
+}
