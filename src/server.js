@@ -1,4 +1,5 @@
 const express = require('express');
+var cors = require('cors');
 const { MongoClient } = require('mongodb');
 const {
     createUserPayloadSchema,
@@ -10,7 +11,9 @@ const { transform } = require('./utils');
 const PORT = process.env.PORT || 3000;
 
 const app = express();
+
 app.use(express.json());
+app.use(cors());
 
 const url =
     'mongodb+srv://master_user:rua.vyj8hnt1YEV1qza@fon.tc03ovy.mongodb.net/?retryWrites=true&w=majority';
@@ -19,6 +22,7 @@ const client = new MongoClient(url);
 const dbName = 'fon-twitter';
 
 // TODO: CHALLANGE: PAGINATION FOR POSTS ON THE HOME PAGE
+// TODO: CHALLANGE: BLUE THE HASHTAG ON THE POST
 
 async function main() {
     await client.connect();
