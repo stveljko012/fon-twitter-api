@@ -3,6 +3,8 @@ const Joi = require('joi');
 const createUserPayloadSchema = Joi.object({
     username: Joi.string().required(),
     password: Joi.string().required(),
+    firstName: Joi.string().default(null),
+    lastName: Joi.string().default(null),
 });
 
 const createTweetPayloadSchema = Joi.object({
@@ -21,5 +23,5 @@ const createCommentPayloadSchema = Joi.object({
 module.exports = {
     createUserPayloadSchema,
     createTweetPayloadSchema,
-    createCommentPayloadSchema
+    createCommentPayloadSchema,
 };
