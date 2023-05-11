@@ -1,10 +1,11 @@
 const express = require('express');
-var cors = require('cors');
-const { MongoClient } = require('mongodb');
+const cors = require('cors');
+const { MongoClient, ObjectId } = require('mongodb');
 const {
     createUserPayloadSchema,
     createTweetPayloadSchema,
     createCommentPayloadSchema,
+    idParamsSchema,
 } = require('./validation');
 const { transform } = require('./utils');
 
@@ -76,6 +77,21 @@ async function main() {
         res.status(201).send(transform(created));
     });
 
+    app.delete('/api/tweets/:id', async (req, res) => {
+        const { value, error } = idParamsSchema.validate(req.params);
+
+        if (error) {
+            res.status(400).send(error);
+            return;
+        }
+
+        await db
+            .collection('tweets')
+            .deleteOne({ _id: new ObjectId(value.id) });
+
+        res.status(200).send();
+    });
+
     // COMMENTS
     app.get('/api/comments', async (req, res) => {
         const comments = await db.collection('comments').find({}).toArray();
@@ -98,6 +114,21 @@ async function main() {
             .findOne({ _id: result.insertedId });
 
         res.status(201).send(transform(created));
+    });
+
+    app.delete('/api/comments/:id', async (req, res) => {
+        const { value, error } = idParamsSchema.validate(req.params);
+
+        if (error) {
+            res.status(400).send(error);
+            return;
+        }
+
+        await db
+            .collection('comments')
+            .deleteOne({ _id: new ObjectId(value.id) });
+
+        res.status(200).send();
     });
 
     app.use('*', (req, res) => {

@@ -20,8 +20,13 @@ const createCommentPayloadSchema = Joi.object({
     content: Joi.string().required(),
 });
 
+const idParamsSchema = Joi.object({
+    id: Joi.string().length(24),
+});
+
 module.exports = {
     createUserPayloadSchema,
     createTweetPayloadSchema,
     createCommentPayloadSchema,
+    idParamsSchema
 };
